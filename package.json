@@ -1,26 +1,49 @@
 {
-  "name": "gemini-next-web",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.20"
-  },
-  "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.20"
-  }
+	"name": "gemini-next-web",
+	"version": "0.1.0",
+	"private": true,
+	"author": {
+		"name": "dogtiti",
+		"email": "dogtiti921@gmail.com",
+		"url": "https://github.com/dogtiti"
+	},
+	"license": "MIT",
+	"homepage": "https://github.com/Dogtiti/GeminiNextWeb#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Dogtiti/GeminiNextWeb.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Dogtiti/GeminiNextWeb/issues"
+	},
+	"keywords": [
+		"gemini",
+		"chatbot",
+		"next.js",
+		"react",
+		"typescript"
+	],
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint"
+	},
+	"dependencies": {
+		"@ant-design/nextjs-registry": "^1.0.2",
+		"@ant-design/x": "^1.0.2",
+		"next": "14.2.20",
+		"react": "^18",
+		"react-dom": "^18"
+	},
+	"devDependencies": {
+		"@types/node": "^20",
+		"@types/react": "^18",
+		"@types/react-dom": "^18",
+		"eslint": "^8",
+		"eslint-config-next": "14.2.20",
+		"postcss": "^8",
+		"tailwindcss": "^3.4.1",
+		"typescript": "^5"
+	}
 }
