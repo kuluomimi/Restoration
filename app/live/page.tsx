@@ -1,9 +1,14 @@
 'use client';
-import { Layout, theme, Collapse, Input, Flex } from 'antd';
-import React, { useState, useEffect } from 'react';
+import { Layout, theme, Collapse, Input, Flex, Button } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sender } from '@ant-design/x';
 import { Bubble } from '@ant-design/x';
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined, PauseCircleOutlined, PlayCircleOutlined, PauseCircleTwoTone, PlayCircleTwoTone } from '@ant-design/icons';
+import MediaButtons from '@/components/media-buttons';
+import { useLiveAPIContext } from "@/vendor/contexts/LiveAPIContext";
+import { StreamingLog } from "@/vendor/multimodal-live-types";
+
+
 const fooAvatar: React.CSSProperties = {
 	color: '#f56a00',
 	backgroundColor: '#fde3cf',
@@ -20,11 +25,32 @@ const hideAvatar: React.CSSProperties = {
 const { Header, Content } = Layout;
 const { Panel } = Collapse;
 
+
 const LivePage = () => {
 	const {
 		token: { colorBgContainer, colorBgLayout },
 	} = theme.useToken();
-	const [recording, setRecording] = useState(false);
+	const videoRef = useRef<HTMLVideoElement>(null);
+    // either the screen capture, the video or null, if null we hide it
+    const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
+	const { client, connected, connect, disconnect } = useLiveAPIContext();
+	const [textInput, setTextInput] = useState("");
+	const handleSubmit = () => {
+		client.send([{ text: textInput }]);
+		setTextInput("");
+	};
+
+	const log = ({ date, type, message }: StreamingLog) => {
+		console.log('log', date, type, message)
+	}
+	useEffect(() => {
+		client.on("log", log);
+		return () => {
+		  client.off("log", log);
+		};
+	}, [client, log]);
+
+	console.log('video', !connected || !videoRef.current || !videoStream, 'connected', connected, 'videoStream', videoStream)
 
 	return (
 		<Layout
@@ -50,6 +76,7 @@ const LivePage = () => {
 					height: '100%',
 					background: colorBgContainer,
 					borderRadius: 20,
+					position: 'relative'
 				}}
 			>
 				<div className='px-5 py-2'>
@@ -100,21 +127,46 @@ const LivePage = () => {
 						/>
 					</Flex>
 				</div>
-				<div className='px-5 py-2'>
+				<Flex justify='center'>
+					<Button
+					    type={ connected ? 'primary': 'default' }
+						onClick={connected ? disconnect : connect}
+						icon={connected? <PauseCircleTwoTone /> : <PlayCircleTwoTone /> }
+					/>
+				</Flex>
+				<div className='px-5 py-2' style={{ pointerEvents: !connected ? 'none' as any : ''}}>
 					<Sender
-						onSubmit={() => {}}
-						allowSpeech={{
-							// When setting `recording`, the built-in speech recognition feature will be disabled
-							recording,
-							onRecordingChange: (nextRecording) => {
-								console.log(
-									'Dogtiti ~ Page ~ nextRecording:',
-									nextRecording
-								);
-
-								setRecording(nextRecording);
-							},
+						onSubmit={handleSubmit}
+						value={textInput}
+						onKeyDown={(e) => {
+						if (e.key === "Enter" && !e.shiftKey) {
+							e.preventDefault();
+							e.stopPropagation();
+							handleSubmit();
+						}
 						}}
+						disabled={!connected}
+						prefix={
+							<MediaButtons
+								videoRef={videoRef}
+								supportsVideo={true}
+								onVideoStreamChange={setVideoStream}
+							/>
+						}
+					/>
+					<video
+						style={{
+							position: 'absolute',
+							top: 70,
+							right: 20,
+							maxWidth: 300,
+							borderRadius: 10,
+							border: '1px solid #333',
+							display: !videoStream ? 'none': 'auto'
+						}}
+						ref={videoRef}
+						autoPlay
+						playsInline
 					/>
 				</div>
 			</Content>

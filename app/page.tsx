@@ -1,11 +1,10 @@
 'use client';
 import React from 'react';
-import { Bubble } from '@ant-design/x';
+import { redirect } from 'next/navigation'
 
-const Home = () => (
-	<div className='App'>
-		<Bubble content='Hello world!' />
-	</div>
-);
+const Home = () => {
+  redirect('/live')
+  return null;
+}
 
 export default Home;

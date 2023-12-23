@@ -5,6 +5,7 @@ import type { MenuProps } from 'antd';
 import { Layout, Menu, theme, ConfigProvider } from 'antd';
 import clsx from 'clsx';
 import { useRouter, usePathname } from 'next/navigation';
+import { LiveAPIProvider } from "@/vendor/contexts/LiveAPIContext";
 
 const { Sider } = Layout;
 
@@ -27,6 +28,14 @@ function getItem(
 const items: MenuItem[] = [
 	getItem('Stream Realtime', '/live', <AudioOutlined />),
 ];
+
+const API_KEY = process.env.REACT_APP_GEMINI_API_KEY as string || 'AIzaSyDBpT1lZcOOvSo6vr9YcMTMzEji1_wrjzw';
+if (typeof API_KEY !== "string") {
+  throw new Error("set REACT_APP_GEMINI_APIK_KEY in .env");
+}
+
+const host = "generativelanguage.googleapis.com";
+const uri = `wss://${host}/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent`;
 
 const GlobalLayout: React.FC<{
 	children: React.ReactNode;
@@ -139,7 +148,9 @@ const GlobalLayout: React.FC<{
 						<LeftOutlined rotate={collapsed ? 180 : 0} />
 					</div>
 				</Sider>
-				{children}
+				<LiveAPIProvider url={uri} apiKey={API_KEY}>
+					{children}
+				</LiveAPIProvider>
 			</Layout>
 		</ConfigProvider>
 	);

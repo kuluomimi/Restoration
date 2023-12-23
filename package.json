@@ -33,8 +33,11 @@
 		"@ant-design/icons": "^5.5.2",
 		"@ant-design/nextjs-registry": "^1.0.2",
 		"@ant-design/x": "^1.0.2",
+		"@google/generative-ai": "^0.21.0",
 		"antd": "^5.22.5",
 		"clsx": "^2.1.1",
+		"eventemitter3": "^5.0.1",
+		"lodash": "^4.17.21",
 		"next": "14.2.20",
 		"react": "^18",
 		"react-dom": "^18"
