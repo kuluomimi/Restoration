@@ -29,7 +29,7 @@ const items: MenuItem[] = [
 	getItem('Stream Realtime', '/live', <AudioOutlined />),
 ];
 
-const API_KEY = process.env.REACT_APP_GEMINI_API_KEY as string || 'AIzaSyDBpT1lZcOOvSo6vr9YcMTMzEji1_wrjzw';
+const API_KEY = process.env.REACT_APP_GEMINI_API_KEY as string || '';
 if (typeof API_KEY !== "string") {
   throw new Error("set REACT_APP_GEMINI_APIK_KEY in .env");
 }
