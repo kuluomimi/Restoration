@@ -59,6 +59,7 @@ const GlobalLayout: React.FC<{
 		>
 			<Layout style={{ minHeight: '100vh' }}>
 				<Sider
+					width={250}
 					trigger={null}
 					collapsible
 					collapsed={collapsed}
@@ -71,7 +72,7 @@ const GlobalLayout: React.FC<{
 					>
 						<div
 							className={clsx(
-								'transition-transform duration-500 ease-in-out absolute w-full left-0 top-0 overflow-hidden',
+								'transition-transform duration-500 ease-in-out absolute w-full left-0 top-0 overflow-hidden font-medium text-2xl',
 								{
 									'translate-x-full': collapsed,
 									'translate-x-0': !collapsed,
@@ -129,7 +130,7 @@ const GlobalLayout: React.FC<{
 						onClick={() => setCollapsed(!collapsed)}
 						className='ant-layout-sider-trigger'
 						style={{
-							width: collapsed ? 60 : 180,
+							width: collapsed ? 60 : 230,
 							color: '#000',
 							background: colorBgLayout,
 							padding: '0 10px',
