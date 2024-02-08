@@ -125,8 +125,7 @@ const LivePage = () => {
 				style={{
 					height: '100%',
 					background: colorBgContainer,
-					borderRadius: 20,
-					position: 'relative'
+					borderRadius: 20
 				}}
 			>
 				<Flex style={{ height: '100%' }}>
@@ -136,6 +135,7 @@ const LivePage = () => {
 						style={{
 							borderRadius: 20,
 							background: '#fff',
+							position: 'relative'
 						}}
 					>
 						<div className='px-5 py-2'>
@@ -222,7 +222,7 @@ const LivePage = () => {
 									/>
 								}
 							/>
-							<video
+							{videoStream ? <video
 								style={{
 									position: 'absolute',
 									top: 70,
@@ -235,7 +235,7 @@ const LivePage = () => {
 								ref={videoRef}
 								autoPlay
 								playsInline
-							/>
+							/> : null}
 						</div>
 					</Flex>
 					<Flex

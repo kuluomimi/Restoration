@@ -142,14 +142,14 @@ function MediaButtons({
         {supportsVideo && (
           <>
             <MediaStreamButton
-              isStreaming={connected && webcam.isStreaming}
+              isStreaming={webcam.isStreaming}
               start={changeStreams(webcam)}
               stop={changeStreams()}
               onIcon={<VideoCameraOutlined />}
               offIcon={<VideoCameraOutlined />}
             />
             <MediaStreamButton
-              isStreaming={connected && screenCapture.isStreaming}
+              isStreaming={screenCapture.isStreaming}
               start={changeStreams(screenCapture)}
               stop={changeStreams()}
               onIcon={<DesktopOutlined />}
