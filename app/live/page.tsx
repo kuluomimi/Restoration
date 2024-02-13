@@ -57,7 +57,7 @@ const LivePage = () => {
 	const videoRef = useRef<HTMLVideoElement>(null);
     // either the screen capture, the video or null, if null we hide it
     const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
-	const { client, connected, connect, disconnect } = useLiveAPIContext();
+	const { client, config, setConfig, connected, connect, disconnect } = useLiveAPIContext();
 	const [textInput, setTextInput] = useState("");
 	const handleSubmit = () => {
 		client.send([{ text: textInput }]);
@@ -75,13 +75,34 @@ const LivePage = () => {
 	}, [client, log]);
 
 	console.log('video', !connected || !videoRef.current || !videoStream, 'connected', connected, 'videoStream', videoStream)
-	const [recording, setRecording] = useState(false);
+    console.log('config', config)
+
 	const [model, setModel] = useLocalStorageState('model', {
 		defaultValue: 'gemini-2.0-flash-exp',
 	});
 	const [outPut, setOutPut] = useLocalStorageState('output', {
 		defaultValue: 'audio',
 	});
+	const [voice, setVoice] = useLocalStorageState('output', {
+		defaultValue: 'Puck',
+	});
+
+	useEffect(() => {
+		if (!connected) return;
+		const speechConfig = {
+			voiceConfig: {
+				prebuiltVoiceConfig: {
+					voiceName: voice
+				}
+			},
+		}
+		const generationConfig = {
+			...config?.generationConfig,
+			speechConfig,
+			responseModalities: outPut
+	    } as any
+		setConfig({ ...config, generationConfig })
+	}, [connected, model, outPut, voice])
 
 	const [tools, setTools] = useLocalStorageState<ToolsState>('tools', {
 		defaultValue: {
@@ -309,16 +330,28 @@ const LivePage = () => {
 						</FieldItem>
 						<FieldItem label='Voice'>
 							<Select
-								onChange={setOutPut}
-								value={outPut}
+								onChange={setVoice}
+								value={voice}
 								options={[
 									{
-										value: 'audio',
-										label: <span>Audio</span>,
+										value: 'Puck',
+										label: <span>Puck</span>,
 									},
 									{
-										value: 'text',
-										label: <span>Text</span>,
+										value: 'Charon',
+										label: <span>Charon</span>,
+									},
+									{
+										value: 'Kore',
+										label: <span>Kore</span>,
+									},
+									{
+										value: 'Fenrir',
+										label: <span>Fenrir</span>,
+									},
+									{
+										value: 'Aoede',
+										label: <span>Aoede</span>,
 									},
 								]}
 							/>
