@@ -77,6 +77,9 @@ const LivePage = () => {
 	console.log('video', !connected || !videoRef.current || !videoStream, 'connected', connected, 'videoStream', videoStream)
     console.log('config', config)
 
+	const [prompt, setPrompt] = useLocalStorageState('prompt', {
+		defaultValue: '',
+	});
 	const [model, setModel] = useLocalStorageState('model', {
 		defaultValue: 'gemini-2.0-flash-exp',
 	});
@@ -101,8 +104,9 @@ const LivePage = () => {
 			speechConfig,
 			responseModalities: outPut
 	    } as any
-		setConfig({ ...config, generationConfig })
-	}, [connected, model, outPut, voice])
+		const systemInstruction = prompt ? { parts: [{ text: prompt }] } : undefined
+		setConfig({ ...config, generationConfig, systemInstruction })
+	}, [connected, prompt, model, outPut, voice])
 
 	const [tools, setTools] = useLocalStorageState<ToolsState>('tools', {
 		defaultValue: {
