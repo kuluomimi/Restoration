@@ -1,6 +1,6 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import { UserOutlined, PauseCircleOutlined, PlayCircleOutlined, PauseCircleTwoTone, PlayCircleTwoTone } from '@ant-design/icons';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { UserOutlined, PauseCircleTwoTone, PlayCircleTwoTone } from '@ant-design/icons';
 import MediaButtons from '@/components/media-buttons';
 import { useLiveAPIContext } from "@/vendor/contexts/LiveAPIContext";
 import { StreamingLog } from "@/vendor/multimodal-live-types";
@@ -64,9 +64,9 @@ const LivePage = () => {
 		setTextInput("");
 	};
 
-	const log = ({ date, type, message }: StreamingLog) => {
+	const log = useCallback(({ date, type, message }: StreamingLog) => {
 		console.log('log', date, type, message)
-	}
+	}, [])
 	useEffect(() => {
 		client.on("log", log);
 		return () => {
@@ -86,7 +86,7 @@ const LivePage = () => {
 	const [outPut, setOutPut] = useLocalStorageState('output', {
 		defaultValue: 'audio',
 	});
-	const [voice, setVoice] = useLocalStorageState('output', {
+	const [voice, setVoice] = useLocalStorageState('voice', {
 		defaultValue: 'Puck',
 	});
 
@@ -106,7 +106,7 @@ const LivePage = () => {
 	    } as any
 		const systemInstruction = prompt ? { parts: [{ text: prompt }] } : undefined
 		setConfig({ ...config, generationConfig, systemInstruction })
-	}, [connected, prompt, model, outPut, voice])
+	}, [connected, prompt, model, outPut, voice, config, setConfig])
 
 	const [tools, setTools] = useLocalStorageState<ToolsState>('tools', {
 		defaultValue: {
@@ -172,7 +172,7 @@ const LivePage = () => {
 										key: 'prompts',
 										label: 'Prompts',
 										children: (
-											<Input placeholder='Enter your prompt here' />
+											<Input placeholder='Enter your prompt here' value={prompt} onChange={e => setPrompt(e.target.value)}/>
 										),
 										style: panelStyle,
 									},
@@ -194,7 +194,7 @@ const LivePage = () => {
 									placement='start'
 									content='Good morning, how are you?'
 									avatar={{
-										icon: <UserOutlined />,
+										icon: <Image src={GeminiIcon} alt={'Model'} />,
 										style: fooAvatar,
 									}}
 								/>
